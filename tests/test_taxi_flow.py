@@ -108,15 +108,11 @@ class TestTaxiFlow:
     @tag("UI", "regress", "taxi")
     @allure.title("Стоимость в блоке 'Детали' совпадает со стоимостью до заказа")
     def test_price_matches_before_and_after_order(self, call_taxi_page_price):
-        assert call_taxi_page_price.is_price_equal_before_and_after(), (
-            "Цена до оформления заказа не совпадает с ценой в деталях заказа"
-        )
+        assert call_taxi_page_price.is_price_equal_before_and_after()
 
     @pytest.mark.xfail(reason="Баг: кнопка 'Отменить' не кликабельна")
     @severity(Level.NORMAL)
     @tag("UI", "regress", "taxi")
     @allure.title("Нажатие кнопки 'Отменить' закрывает модальное окно")
     def test_cancel_button_closes_modal(self, call_taxi_page_waiting):
-        assert call_taxi_page_waiting.is_modal_closed_after_cancel(), (
-            "Модальное окно не закрылось после нажатия 'Отменить'"
-        )
+        assert call_taxi_page_waiting.is_modal_closed_after_cancel()

@@ -81,8 +81,11 @@ class BasePage:
 
     @allure.step("Проверить кликабельность элемента: {locator}")
     def _is_clickable(self, locator) -> bool:
-        self.wait.until(EC.element_to_be_clickable(locator))
-        return True
+        try:
+            self.wait.until(EC.element_to_be_clickable(locator))
+            return True
+        except TimeoutException:
+            return False
 
     @allure.step("Получить текст двух элементов")
     def _get_texts(self, locator_1, locator_2) -> list:

@@ -1,11 +1,7 @@
-import os
-
 import allure
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
-import constants
 from data.taxi.taxi_data import TaxiData
 from pages.call_taxi_page import CallTaxiPage
 from pages.main_page import MainPage
@@ -19,7 +15,6 @@ def browser():
 
     yield driver
 
-    attach_screenshot(driver)
     driver.quit()
 
 
@@ -31,10 +26,15 @@ def main_page(browser) -> MainPage:
 
 
 @pytest.fixture
-def call_taxi_page(main_page) -> CallTaxiPage:
+def main_page_with_route(main_page) -> MainPage:
     main_page.add_two_address(TaxiData.addresses.LOCATION_1, TaxiData.addresses.LOCATION_2)
-    main_page.confirm_order_taxi()
-    return CallTaxiPage(main_page.driver)
+    return main_page
+
+
+@pytest.fixture
+def call_taxi_page(main_page_with_route) -> CallTaxiPage:
+    main_page_with_route.confirm_order_taxi()
+    return CallTaxiPage(main_page_with_route.driver)
 
 
 @pytest.fixture
@@ -50,17 +50,12 @@ def call_taxi_page_final(call_taxi_page_waiting) -> CallTaxiPage:
 
 
 @pytest.fixture
-def call_taxi_page_price(main_page) -> CallTaxiPage:
-    main_page.add_two_address(TaxiData.addresses.LOCATION_1, TaxiData.addresses.LOCATION_2)
-    return CallTaxiPage(main_page.driver)
+def call_taxi_page_price(main_page_with_route) -> CallTaxiPage:
+    return CallTaxiPage(main_page_with_route.driver)
 
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    """
-    Хук для снятия скриншота в момент падения теста.
-    Срабатывает при наличии поп-апов, невидимых элементов и других UI-аномалий.
-    """
     outcome = yield
     rep = outcome.get_result()
 

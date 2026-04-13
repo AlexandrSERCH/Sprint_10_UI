@@ -37,15 +37,14 @@ class RouteExpected:
     ACTIVE_TAB: str = "Оптимальный"
 
 
-@dataclass(frozen=True)
 class OrderBlock:
-    FIELDS = [
+    FIELDS: Tuple[str, ...] = (
         "Телефон",
         "Способ оплаты",
         "Комментарий водителю",
         "Требования к заказу",
         "Заказ тарифа Такси",
-    ]
+    )
 
 
 @dataclass(frozen=True)

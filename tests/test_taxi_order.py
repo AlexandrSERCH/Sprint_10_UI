@@ -1,7 +1,7 @@
 import allure
 import pytest
 
-from data.taxi.taxi_data import TaxiData, OrderBlock
+from data.taxi.taxi_data import TaxiData
 from utils.markers import tag, severity, Level
 
 
@@ -51,7 +51,7 @@ class TestTaxiOrder:
             f"Тариф '{taxi_title}': ожидалось '{expected_description}', получено '{actual}'"
         )
 
-    @pytest.mark.parametrize("field_name", OrderBlock.FIELDS)
+    @pytest.mark.parametrize("field_name", TaxiData.order_block.FIELDS)
     @severity(Level.NORMAL)
     @tag("UI", "regress", "taxi")
     @allure.title("Поле '{field_name}' отображается в блоке заказа")
