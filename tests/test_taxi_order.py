@@ -13,6 +13,7 @@ class TestTaxiOrder:
     @tag("UI", "smoke", "regress", "taxi")
     @allure.title("В форме заказа отображаются 6 тарифов по ТЗ")
     def test_six_taxi_tariffs_visible(self, call_taxi_page):
+        call_taxi_page.confirm_order_taxi()
         assert call_taxi_page.is_get_6_taxi_titles(), (
             "Не отображаются 6 тарифов по ТЗ"
         )
@@ -21,6 +22,7 @@ class TestTaxiOrder:
     @tag("UI", "smoke", "regress", "taxi")
     @allure.title("Один из 6 тарифов активен")
     def test_one_tariff_is_active(self, call_taxi_page):
+        call_taxi_page.confirm_order_taxi()
         assert call_taxi_page.is_one_active_taxi_title(), (
             "Ни один тариф не активен"
         )
@@ -46,6 +48,7 @@ class TestTaxiOrder:
     @tag("UI", "regress", "taxi")
     @allure.title("Описание тарифа '{taxi_title}' соответствует ТЗ")
     def test_tariff_description_matches_spec(self, call_taxi_page, taxi_title, expected_description):
+        call_taxi_page.confirm_order_taxi()
         actual = call_taxi_page.get_tariff_description(taxi_title)
         assert actual == expected_description, (
             f"Тариф '{taxi_title}': ожидалось '{expected_description}', получено '{actual}'"
@@ -56,6 +59,7 @@ class TestTaxiOrder:
     @tag("UI", "regress", "taxi")
     @allure.title("Поле '{field_name}' отображается в блоке заказа")
     def test_order_field_is_visible(self, call_taxi_page, field_name):
+        call_taxi_page.confirm_order_taxi()
         assert call_taxi_page.is_visible_order_field(field_name), (
             f"Поле '{field_name}' не отображается в блоке заказа"
         )

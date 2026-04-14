@@ -49,3 +49,11 @@ class CallTaxiPageLocators:
     DRIVER_RATING = (By.XPATH, '//div[@class="order-btn-rating"]')
     PRICE_AFTER_ORDER = (By.XPATH, '//div[text()="Еще про поездку"]/following-sibling::div')
     PRICE_BEFORE_ORDER = (By.XPATH, '//div[@class="text"]')
+
+    @staticmethod
+    def active_taxi_by_title(taxi_title: str) -> tuple:
+        return By.XPATH, f'//div[@class="tcard active"]/div[text()="{taxi_title}"]'
+
+    @staticmethod
+    def taxi_title_locator(taxi_title: str) -> tuple:
+        return By.XPATH, f'//div[@class="tcard-title" and text()="{taxi_title}"]'

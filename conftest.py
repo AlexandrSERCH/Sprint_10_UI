@@ -33,25 +33,19 @@ def main_page_with_route(main_page) -> MainPage:
 
 @pytest.fixture
 def call_taxi_page(main_page_with_route) -> CallTaxiPage:
-    main_page_with_route.confirm_order_taxi()
     return CallTaxiPage(main_page_with_route.driver)
 
 
 @pytest.fixture
 def call_taxi_page_waiting(call_taxi_page) -> CallTaxiPage:
-    call_taxi_page.open_waiting_window()
+    call_taxi_page.confirm_order_taxi()
     return call_taxi_page
 
 
 @pytest.fixture
 def call_taxi_page_final(call_taxi_page_waiting) -> CallTaxiPage:
-    call_taxi_page_waiting.wait_for_timer_to_expire()
+    call_taxi_page_waiting.open_waiting_window()
     return call_taxi_page_waiting
-
-
-@pytest.fixture
-def call_taxi_page_price(main_page_with_route) -> CallTaxiPage:
-    return CallTaxiPage(main_page_with_route.driver)
 
 
 @pytest.hookimpl(hookwrapper=True)

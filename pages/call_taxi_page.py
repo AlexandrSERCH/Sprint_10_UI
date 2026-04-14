@@ -1,6 +1,5 @@
 import allure
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.by import By
 
 from data.taxi.taxi_data import TaxiData
 from locators.call_taxi_page_locators import CallTaxiPageLocators as L
@@ -8,14 +7,6 @@ from pages.base_page import BasePage
 
 
 class CallTaxiPage(BasePage):
-
-    @staticmethod
-    def _active_taxi_by_title(taxi_title: str) -> tuple:
-        return By.XPATH, f'//div[@class="tcard active"]/div[text()="{taxi_title}"]'
-
-    @staticmethod
-    def _taxi_title_locator(taxi_title: str) -> tuple:
-        return By.XPATH, f'//div[@class="tcard-title" and text()="{taxi_title}"]'
 
     @allure.step("Нажать кнопку 'Вызвать такси'")
     def confirm_order_taxi(self) -> None:
@@ -34,7 +25,7 @@ class CallTaxiPage(BasePage):
         active_block = self._find_element(L.ACTIVE_TAXI_TITLE)
         for el in elements:
             try:
-                active_block.find_element(*self._active_taxi_by_title(el.text))
+                active_block.find_element(*L.active_taxi_by_title(el.text))
                 return True
             except NoSuchElementException:
                 continue
@@ -42,7 +33,7 @@ class CallTaxiPage(BasePage):
 
     @allure.step("Получить описание тарифа: {taxi_title}")
     def get_tariff_description(self, taxi_title: str) -> str:
-        self._click(self._taxi_title_locator(taxi_title))
+        self._click(L.taxi_title_locator(taxi_title))
         taxi_info = self._find_element(L.TAXI_INFO)
         self._hover(taxi_info)
         name = self._get_text(L.TARIFF_NAME)
@@ -117,16 +108,16 @@ class CallTaxiPage(BasePage):
         name = self._get_text(L.DRIVER_NAME)
         return name in TaxiData.drivers.NAMES
 
-    @allure.step("Проверить совпадение цены до и после оформления заказа")
-    def is_price_equal_before_and_after(self) -> bool:
+    @allure.step("Получить стоимость до оформления заказа")
+    def get_price_before_order(self) -> str:
         text = self._get_text(L.PRICE_BEFORE_ORDER)
-        price_before = text.split()[2]
-        self.confirm_order_taxi()
-        self.open_waiting_window()
+        return text.split()[2]
+
+    @allure.step("Получить стоимость в блоке 'Детали' после оформления заказа")
+    def get_price_after_order(self) -> str:
         self._click(L.ORDER_DETAILS)
         text_after = self._get_text(L.PRICE_AFTER_ORDER)
-        price_after = text_after.split()[2].split("₽")[0]
-        return price_before == price_after
+        return text_after.split()[2].split("₽")[0]
 
     @allure.step("Нажать 'Отменить' и проверить закрытие модального окна")
     def is_modal_closed_after_cancel(self) -> bool:

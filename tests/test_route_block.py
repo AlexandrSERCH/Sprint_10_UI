@@ -11,8 +11,9 @@ class TestRouteBlock:
     @severity(Level.NORMAL)
     @tag("UI", "smoke", "regress", "routes")
     @allure.title("При вводе двух разных адресов отображается блок выбора маршрута")
-    def test_route_block_visible_with_different_addresses(self, main_page_with_route):
-        assert main_page_with_route.is_route_block_visible()
+    def test_route_block_visible_with_different_addresses(self, main_page):
+        main_page.add_two_address(TaxiData.addresses.LOCATION_1, TaxiData.addresses.LOCATION_2)
+        assert main_page.is_route_block_visible()
 
     @severity(Level.NORMAL)
     @tag("UI", "smoke", "regress", "routes")
